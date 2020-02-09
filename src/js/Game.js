@@ -31,7 +31,7 @@ class Game  extends EventTarget {
        this.stickToMassCenter = false;
        this.showStarsTrajectory = false;
 
-       let gap = 80;
+       const gap = 80;
        this.s1 = Star({
             settings:{
                    x: W/2+gap,  
@@ -95,10 +95,8 @@ class Game  extends EventTarget {
        
     }
     start(){
-       
        this.loop.start();
        $(this.canvas).animate({opacity:1},2000,()=>{
-
               this.onStopClick(null,()=>{
                    $(".controls").animate({opacity:1},1000)
                 
@@ -107,7 +105,6 @@ class Game  extends EventTarget {
 
                    if(!visited) $("#greeting").modal("toggle");
                    kontra.setStoreItem(store_name,true);  
-                  
               });              
        })
     }
@@ -133,8 +130,8 @@ class Game  extends EventTarget {
                       const x = e.x!=undefined?e.x:e.touches[0].clientX,
                             y = e.y!=undefined?e.y:e.touches[0].clientY;
 
-                      let in_s1 = this.s1.collides({x:x,y:y,radius:0}),
-                          in_s2 = this.s2.collides({x:x,y:y,radius:0});
+                      const in_s1 = this.s1.collides({x:x,y:y,radius:0}),
+                            in_s2 = this.s2.collides({x:x,y:y,radius:0});
 
                       this.hideVelocityControls(); 
                       this.currentStar = '';
@@ -146,8 +143,6 @@ class Game  extends EventTarget {
                            this.currentStar.draggable = true; 
                            this.launchVelocityControlsFor(this.currentStar);
                       }
-
-
        });
        $("canvas").on("mouseup touchend",e=>{
                       if(this.currentStar)
@@ -175,8 +170,8 @@ class Game  extends EventTarget {
                       }
        });
        $("#velocity_value,#velocity_direction").on("input",()=>{
-              let val = $("#velocity_value").val(),
-                 dir = $("#velocity_direction").val();
+              const val = $("#velocity_value").val(),
+                    dir = $("#velocity_direction").val();
               $("#velocity_value_label").text("value: "+val);
               this.currentStar.settings.velocity = { value:parseInt(val),
                                                      direction:parseInt(dir) };
@@ -198,11 +193,11 @@ class Game  extends EventTarget {
     }
     
     resetStars(cb_){
-       let ready = {s1:false,s2:false};
-       let cb = (name)=>{
-           ready[name] = true;
-           if(!ready.s1 || !ready.s2) return;
-           if(cb_) cb_();
+       const ready = {s1:false,s2:false};
+       const cb = (name)=>{
+             ready[name] = true;
+             if(!ready.s1 || !ready.s2) return;
+             if(cb_) cb_();
        }
        this.s1.reset(()=>cb('s1'));
        this.s2.reset(()=>cb('s2'));
@@ -301,7 +296,7 @@ class Game  extends EventTarget {
 
     massCenter(){
 
-       let M = this.s1.mass+this.s2.mass;
+       const M = this.s1.mass+this.s2.mass;
        return new kontra.Vector((this.s1.mass*this.s1.x+this.s2.mass*this.s2.x)/M,
                                 (this.s1.mass*this.s1.y+this.s2.mass*this.s2.y)/M);
     }
@@ -317,10 +312,10 @@ class Game  extends EventTarget {
 
        if(this.stickToMassCenter && this.state != 'stopping' && !this.s1.resetting && !this.s2.resetting){
           
-          let m_c = this.massCenter();
+          const m_c = this.massCenter();
 
           for(let s of [this.s1,this.s2]){
-             let offset = new kontra.Vector(this.W/2-m_c.x,this.H/2-m_c.y);
+             const offset = new kontra.Vector(this.W/2-m_c.x,this.H/2-m_c.y);
  
              if(abs(offset.x) < 1) s.x+=offset.x;
              else s.x+=offset.x/10;

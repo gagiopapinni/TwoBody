@@ -48,30 +48,20 @@ function Star(ops){
               }
           }
 
-          if(this.showVelocity){
-             const val = this.settings.velocity.value,
-                   dir = this.settings.velocity.direction;
-             let size = val?this.radius*1.5 + val*10:0;
-     
-             this.context.save();
-             this.context.beginPath();
-             this.context.globalAlpha = 0.7;
-             this.context.translate(this.x,this.y);
-             this.context.rotate(Math.PI/180*dir);
-             this.context.drawImage(kontra.imageAssets.arrow,0,-this.radius/2,size,this.radius);
-             this.context.moveTo(0,0);
-             this.context.setLineDash([10,10]);
-             this.context.strokeStyle = 'white';
-             this.context.lineTo(val?innerWidth+innerHeight:0,0);
-             this.context.stroke();
+          if(this.showVelocity) this.drawVelocityArrow();
 
-             this.context.restore();
-          }
+          this.drawLight();
+          this.drawBody();
+
+          if(this.draggable)
+             this.context.drawImage(kontra.imageAssets.hand,this.x,this.y,this.radius,this.radius);
+          
+       
+       },
+       drawLight(){
           this.context.save();
-          let gradient;
-
-          gradient = this.context.createRadialGradient(this.x, this.y,0,this.x, this.y, this.radius*10);
-          gradient.addColorStop(0, this.color);//#####################or maybe 'white'?#######################
+          const gradient = this.context.createRadialGradient(this.x, this.y,0,this.x, this.y, this.radius*10);
+          gradient.addColorStop(0, this.color);
           gradient.addColorStop(1, 'rgba(225,225,255,0)');
           this.context.globalAlpha = 0.1
           this.context.fillStyle = gradient;
@@ -80,7 +70,11 @@ function Star(ops){
           this.context.globalCompositeOperation = 'luminosity';
           this.context.fill();
           this.context.globalCompositeOperation = 'source-over';
+          this.context.restore();
 
+       },
+       drawBody(){
+          this.context.save();
           this.context.globalAlpha = 1
           this.context.fillStyle = this.color;
           this.context.beginPath();
@@ -89,7 +83,7 @@ function Star(ops){
           this.context.shadowColor = this.color;
           this.context.fill();
      
-          gradient = this.context.createRadialGradient(this.x,this.y,this.radius*0.6, this.x,this.y,this.radius);
+          const gradient = this.context.createRadialGradient(this.x,this.y,this.radius*0.6, this.x,this.y,this.radius);
           gradient.addColorStop(1, "rgba(225,225,225,"+.8*(this.radius/this.radiusForMass(this.max_mass))+")");
           gradient.addColorStop(0, "rgba(225,225,225,"+(this.radius/this.radiusForMass(this.max_mass))+")");
 
@@ -101,16 +95,25 @@ function Star(ops){
 
           this.context.restore();
 
-          if(this.draggable){
-             this.context.drawImage(kontra.imageAssets.hand,this.x,this.y,this.radius,this.radius);
-          }
-  
- 
-
-
-          
        },
-       
+       drawVelocityArrow(){
+          const val = this.settings.velocity.value,
+                dir = this.settings.velocity.direction;
+          const size = val?this.radius*1.5 + val*10:0;
+     
+          this.context.save();
+          this.context.beginPath();
+          this.context.globalAlpha = 0.7;
+          this.context.translate(this.x,this.y);
+          this.context.rotate(Math.PI/180*dir);
+          this.context.drawImage(kontra.imageAssets.arrow,0,-this.radius/2,size,this.radius);
+          this.context.moveTo(0,0);
+          this.context.setLineDash([10,10]);
+          this.context.strokeStyle = 'white';
+          this.context.lineTo(val?innerWidth+innerHeight:0,0);
+          this.context.stroke();
+          this.context.restore();
+       },
        
        reset(cb,data){
           if(cb) this.reset_cb = cb;
