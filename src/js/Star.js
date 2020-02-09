@@ -19,29 +19,12 @@ function Star(ops){
 
        dx: 0, 
        dy: 0,
-       showTrajectory: ops.showTrajectory || false,
 
-       trajectory: [],
        draggable: false,
        isBeingDragged: false,
        showVelocity: false,
 
        render (){ 
-
-       // this.drawTrajectory(); this should be called from outside,
-         //otherwise one's trajectory will be drawn over another star
-
-          if(this.showTrajectory){
-            let tr_last = this.trajectory[this.trajectory.length-1] || [this.x+100,this.y+100];
-            if(this.vectorDist(this.x,this.y,tr_last[0],tr_last[1]) > 2 )
-              this.trajectory.push([this.x,this.y]);
-            if(this.trajectory.length>500) this.trajectory.splice(0,1);
-          }else{
-            if(this.trajectory.length) this.trajectory.splice(0,5);
-          }
-
-
-
 
           if(this.resetting){
               let offset;
@@ -127,36 +110,13 @@ function Star(ops){
 
           
        },
-       vectorDist(x1,y1,x2,y2){
-          return Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
-       },
-       drawTrajectory(){
-          if(!this.trajectory.length) return;
-          this.context.save();
-          this.context.strokeStyle = this.color;
-          for(let i = 1;i<this.trajectory.length;i++){
-             let a = this.trajectory[i-1],
-                 b = this.trajectory[i];
-             this.context.beginPath();
-             this.context.globalAlpha = i/this.trajectory.length; 
-             //console.clear();console.log(idx) 
-
-             this.context.moveTo(a[0],a[1]);
-             this.context.lineTo(b[0],b[1]);
-             this.context.stroke();
-          }
-
-          this.context.restore();
-          
-       },
+       
+       
        reset(cb,data){
           if(cb) this.reset_cb = cb;
           if(data) this.reset_data = data;
           this.resetting = true;
           this.dx = this.dy = 0;
-           
-          if(this.reset_data && this.reset_data.showTrajectory)     
-              this.showTrajectory = this.reset_data.showTrajectory;
        },
 
        play(){
@@ -180,6 +140,15 @@ function Star(ops){
 
            if(len<=this.radius+star.radius) return true;
            return false;       
+       },
+
+       pullTo(star){
+           let norm = kontra.Vector(star.x-this.x, star.y-this.y).norm();
+    
+           let a = star.mass/Math.pow( Math.sqrt(Math.pow(this.x-star.x,2)+Math.pow(this.y-star.y,2)), 2);
+
+           this.dx += norm.x*a; 
+           this.dy += norm.y*a;
        }
 
 
