@@ -67,9 +67,9 @@ function Star(ops){
           this.context.fillStyle = gradient;
           this.context.beginPath();
           this.context.arc(this.x, this.y, this.radius*100, 0, 2  * Math.PI);
-          this.context.globalCompositeOperation = 'luminosity';
+          //this.context.globalCompositeOperation = 'luminosity';
           this.context.fill();
-          this.context.globalCompositeOperation = 'source-over';
+          //this.context.globalCompositeOperation = 'source-over';
           this.context.restore();
 
        },
