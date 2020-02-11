@@ -61,15 +61,15 @@ function Star(ops){
        drawLight(){
           this.context.save();
           const gradient = this.context.createRadialGradient(this.x, this.y,0,this.x, this.y, this.radius*10);
-          gradient.addColorStop(0, this.color);
+          gradient.addColorStop(0,'rgba(225,225,255,0.6)');
           gradient.addColorStop(1, 'rgba(225,225,255,0)');
           this.context.globalAlpha = 0.1
           this.context.fillStyle = gradient;
           this.context.beginPath();
           this.context.arc(this.x, this.y, this.radius*100, 0, 2  * Math.PI);
-          //this.context.globalCompositeOperation = 'luminosity';
+      //    this.context.globalCompositeOperation = 'luminosity';
           this.context.fill();
-          //this.context.globalCompositeOperation = 'source-over';
+        //  this.context.globalCompositeOperation = 'source-over';
           this.context.restore();
 
        },
