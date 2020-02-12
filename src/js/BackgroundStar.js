@@ -8,7 +8,7 @@ function BackgroundStar(ops){
        color: 'white',
 
        anchor: {x:0.5,y:0.5},
-       radius:Math.random()* (20-15) + 15,
+       radius:Math.random()* (20-5) + 5,
 
        brightness: 50,
  
